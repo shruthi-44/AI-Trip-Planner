@@ -59,6 +59,7 @@ Requirements:
 - Prioritize hotels with high ratings and diverse pricing (budget-friendly to moderate).
 - Only include hotels around {location}, not generic or international chains unless available locally.
 - Include a detailed itinerary for each day, with at least 3 places to visit per day.
+- Include a variety of places such as historical sites, parks, and local attractions.
 
 The JSON must have this exact structure:
 
