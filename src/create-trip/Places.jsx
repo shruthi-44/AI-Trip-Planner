@@ -9,7 +9,7 @@ function Places({ onSelect }) {
   useEffect(() => {
     if (disableSearchRef.current) return; // Don't fetch after selection
 
-    if (query.length < 3) {
+    if (query.length < 2) {
       setResults([]);
       return;
     }

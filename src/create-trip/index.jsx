@@ -68,10 +68,11 @@ function CreateTrip() {
 
   
     const FINAL_PROMPT = AI_PROMPT
-      .replace('{location}', formData?.location?.properties.name|| "your destination")
-      .replace('{totalDays}', formData?.totalDays)
-      .replace('{traveler}', formData?.traveler)
-      .replace('{budget}', formData?.budget);
+  .replace('{location}', formData?.location?.properties?.name || "your destination")
+  .replace('{totalDays}', formData?.totalDays || "3")
+  .replace('{traveler}', formData?.traveler || "2 people")
+  .replace('{budget}', formData?.budget || "moderate");
+
 
     const aiResponse = await generateTripPlan(FINAL_PROMPT);
 
@@ -217,3 +218,5 @@ return (
 }
 
 export default CreateTrip;
+
+

@@ -51,4 +51,53 @@ export const SelectTravelList=[
 ]
 
 
-export const AI_PROMPT='Generate Travel Plan for Location : {location} for {totalDays} Days for {traveler} with a {budget} budget, Give me a Hotels options list with HotelName,Hotel address,Price, hotel image url,geo coordinates,rating,descriptions and suggest itinerary with placeName,Place Details,Place Image Url, Geo Coordinates,ticket Pricing,rating, best Time to travel example morning ,evening,afternoon each of the location for {totalDays}  days with each day plan with best time to visit in JSON format.'
+export const AI_PROMPT = `Generate a travel plan in strict JSON format. 
+Requirements:
+- Provide at least 4 high-quality hotel recommendations that are **local to the destination** ({location}).
+-recommend for hotels that are **budget-friendly** to **moderate** based on the provided budget ({budget}).
+- Hotels must be real or realistic, include addresses specific to {location}, and match the group size and {budget}.
+- Prioritize hotels with high ratings and diverse pricing (budget-friendly to moderate).
+- Only include hotels around {location}, not generic or international chains unless available locally.
+- Include a detailed itinerary for each day, with at least 3 places to visit per day.
+
+The JSON must have this exact structure:
+
+{
+  "tripData": {
+    "travelPlan": {
+      "location": "{location}",
+      "duration": "{totalDays} Days",
+      "groupSize": "{traveler}",
+      "budget": "{budget}",
+      "hotels": [
+        {
+          "hotelName": "string",
+          "address": "string",
+          "price": "string",
+          "image": "string",
+          "geoCoordinates": { "lat": number, "lng": number },
+          "rating": number,
+          "description": "string"
+        }
+      ],
+      "itinerary": [
+        {
+          "day": "Day 1",
+          "places": [
+            {
+              "placeName": "string",
+              "placeDetails": "string",
+              "image": "string",
+              "geoCoordinates": { "lat": number, "lng": number },
+              "ticketPricing": "string",
+              "rating": number,
+              "bestTimeToVisit": "Morning | Afternoon | Evening"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+
+Ensure that all keys are exactly as shown above. Do not include explanations or markdown. Only output pure JSON.`;

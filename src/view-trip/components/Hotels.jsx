@@ -1,8 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { fetchPlaceImage } from '@/service/GlobalAPI';
 
 function Hotels({ trip }) {
-  const hotels = trip?.tripData?.travelPlan?.hotels || [];
+  const hotels = trip?.tripData?.tripData?.travelPlan?.hotels || [];
+  const [images, setImages] = useState([]);
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      const fetchedImages = await Promise.all(
+        hotels.map((hotel) => fetchPlaceImage(hotel.hotelName))
+      );
+      setImages(fetchedImages);
+    };
+
+    if (hotels.length > 0) fetchImages();
+  }, [hotels]);
 
   return (
     <div>
@@ -23,14 +36,16 @@ function Hotels({ trip }) {
             >
               <div className="p-4 flex flex-col h-full">
                 <img
-                  src="/landing.jpg"
+                  src={images[index] || '/landing.jpg'}
                   alt={hotel.hotelName}
                   className="rounded-xl w-full h-48 object-cover mb-4"
                 />
                 <div className="flex flex-col justify-between flex-grow">
                   <div className="mb-2">
                     <h2 className="font-semibold text-lg">{hotel.hotelName}</h2>
-                    <p className="text-sm text-gray-500">📍{hotel?.hotelAddress?.split(' ').slice(0, 5).join(' ')}</p>
+                    <p className="text-sm text-gray-500">
+                      📍{hotel?.hotelAddress?.split(' ').slice(0, 5).join(' ')}
+                    </p>
                   </div>
                   <div className="mt-auto text-sm">
                     <p>💰 {hotel.price}</p>
