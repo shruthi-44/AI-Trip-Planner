@@ -29,7 +29,7 @@ function Hotels({ trip }) {
           >
             <Link
               to={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                hotel.hotelName + ', ' + hotel.hotelAddress
+                hotel.hotelName + ', ' + hotel.address
               )}`}
               target="_blank"
               rel="noopener noreferrer"
@@ -44,7 +44,7 @@ function Hotels({ trip }) {
                   <div className="mb-2">
                     <h2 className="font-semibold text-lg">{hotel.hotelName}</h2>
                     <p className="text-sm text-gray-500">
-                      📍{hotel?.hotelAddress?.split(' ').slice(0, 5).join(' ')}
+                      📍{hotel?.address?.split(' ').slice(0, 5).join(' ')}
                     </p>
                   </div>
                   <div className="mt-auto text-sm">

@@ -17,9 +17,7 @@ import {
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+  } from "@/components/ui/dialog"
 import { FcGoogle } from "react-icons/fc";
 import { useGoogleLogin } from "@react-oauth/google"
 
@@ -66,6 +64,7 @@ function CreateTrip() {
 
   setLoading(true);
 
+
   
     const FINAL_PROMPT = AI_PROMPT
   .replace('{location}', formData?.location?.properties?.name || "your destination")
@@ -74,12 +73,17 @@ function CreateTrip() {
   .replace('{budget}', formData?.budget || "moderate");
 
 
+    try {
     const aiResponse = await generateTripPlan(FINAL_PROMPT);
-
     console.log("-- AI Response --", aiResponse);
-    setLoading(false);
     SaveAiTrip(aiResponse);
     toast("Trip plan generated!");
+  } catch (error) {
+    console.error("AI trip generation failed:", error);
+    toast("Failed to generate trip. Please try again.");
+  } finally {
+    setLoading(false);
+  }
  
   
 };

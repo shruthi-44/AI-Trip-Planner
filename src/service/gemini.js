@@ -19,13 +19,22 @@ const generationConfig = {
 };
 
 function cleanGeminiResponse(text) {
-  // Remove markdown formatting or code blocks (```json ... ```)
-  const cleaned = text
-    .replace(/```json|```/g, "")
-    .replace(/^\s*[\r\n]/gm, "")
+  let cleaned = text
+    .replace(/```(?:json)?/g, "") // remove code block markers
+    .replace(/```/g, "")
     .trim();
 
-  return cleaned;
+  // Remove any leading/trailing text outside JSON
+  const match = cleaned.match(/\{[\s\S]*\}/);
+  if (match) cleaned = match[0];
+
+  // Fix common JSON-breaking issues
+  cleaned = cleaned
+    .replace(/\bNaN\b/g, "null") // replace NaN
+    .replace(/\bundefined\b/g, "null") // replace undefined
+    .replace(/,(\s*[}\]])/g, "$1"); // remove trailing commas
+
+  return cleaned.trim();
 }
 
 export const generateTripPlan = async (prompt) => {
@@ -36,29 +45,19 @@ export const generateTripPlan = async (prompt) => {
     });
 
     const raw = await result.response.text();
-    const responseText = cleanGeminiResponse(raw);
+    console.log("🛠 Raw Gemini Output:", raw);
 
-    console.log("🧠 Gemini Cleaned Response:", responseText);
+    const cleanedResponse = cleanGeminiResponse(raw);
+    console.log("🧠 Gemini Cleaned Response:", cleanedResponse);
 
-    // Try parsing full response
     try {
-      return JSON.parse(responseText);
+      return JSON.parse(cleanedResponse);
     } catch (err) {
-      console.warn("⚠️ Full parse failed, trying regex fallback...");
-
-      const jsonMatch = responseText.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        try {
-          return JSON.parse(jsonMatch[0]);
-        } catch (nestedErr) {
-          throw new Error("❌ JSON fallback also failed.");
-        }
-      } else {
-        throw new Error("❌ No JSON block found in Gemini response.");
-      }
+      throw new Error("❌ Could not parse Gemini JSON after cleanup.");
     }
   } catch (error) {
     console.error("🔥 Error generating trip plan:", error);
     throw error;
   }
 };
+

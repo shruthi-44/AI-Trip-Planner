@@ -17,6 +17,7 @@ import axios from 'axios';
 
 
 
+
 function Header() {
   const user=JSON.parse(localStorage.getItem('user'));
   const [openDialog,setOpenDialog]=useState(false);
@@ -51,7 +52,7 @@ function Header() {
        {user? 
        <div className='flex items-center gap-4'>
         <a href="/create-trip">
-         <Button variant="outline" className= "rounded-full">Create Trip</Button> 
+         <Button variant="outline" className= "rounded-full">+ Create Trip</Button> 
         </a>
         <a href="/my-trips">
         <Button variant="outline" className= "rounded-full">My Trips </Button> 
@@ -79,7 +80,7 @@ function Header() {
         <DialogContent>
           <DialogHeader>
             <DialogDescription>
-              <img src="/logo.svg"/>
+             <h2 className='font-bold text-2xl ml-2 text-blue-800 '>TripBot.</h2>
               <h2 className="font-bold text-lg mt-6">Sign In with Google</h2>
               <p>Sign In to the App with Google authentication securely</p>
               <Button 

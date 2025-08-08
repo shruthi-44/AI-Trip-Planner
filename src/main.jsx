@@ -9,6 +9,7 @@ import Header from './components/ui/custom/Header.jsx'
 import { Toaster } from 'sonner'
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import Viewtrip from './view-trip/index.jsx'
+import MyTrips from '@/mytrips';
 
 const router =createBrowserRouter([
   {
@@ -23,6 +24,11 @@ const router =createBrowserRouter([
     path:'/view-trip/:tripId',
     element: <Viewtrip />
   }
+  ,
+  {
+    path:'/my-trips',
+    element: <MyTrips />
+  }
 
 ])
 
@@ -31,6 +37,7 @@ createRoot(document.getElementById('root')).render(
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GEMINI_AUTH_CLIENT_ID}>
    <Header />
    <Toaster/>
+   
     <RouterProvider router={router}/>
     </GoogleOAuthProvider>
   </React.StrictMode>,

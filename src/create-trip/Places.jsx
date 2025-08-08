@@ -1,14 +1,16 @@
+
+
+
 import React, { useState, useEffect, useRef } from 'react';
 
 function Places({ onSelect }) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
+  const [hasSelected, setHasSelected] = useState(false); // NEW
   const debounceRef = useRef(null);
-  const disableSearchRef = useRef(false); // Block fetch after selection
 
   useEffect(() => {
-    if (disableSearchRef.current) return; // Don't fetch after selection
-
+    if (hasSelected) return; // Stop searching if a place is selected
     if (query.length < 2) {
       setResults([]);
       return;
@@ -35,14 +37,19 @@ function Places({ onSelect }) {
         setResults([]);
       }
     }, 300);
-  }, [query]);
+  }, [query, hasSelected]);
 
   const handleSelect = (place) => {
     const location = `${place.properties.name}, ${place.properties.country}`;
     setQuery(location);
     setResults([]);
-    disableSearchRef.current = true; // Block further search
+    setHasSelected(true); // Block further search
     onSelect(place);
+  };
+
+  const handleInputChange = (e) => {
+    setQuery(e.target.value);
+    setHasSelected(false); // User is searching again
   };
 
   return (
@@ -51,14 +58,11 @@ function Places({ onSelect }) {
         type="text"
         value={query}
         placeholder="Enter a location"
-        onChange={(e) => {
-          disableSearchRef.current = false; // Allow search on next type
-          setQuery(e.target.value);
-        }}
+        onChange={handleInputChange}
         className="w-full p-2 border rounded"
       />
 
-      {results.length > 0 && (
+      {!hasSelected && results.length > 0 && (
         <ul className="absolute z-10 bg-white border w-full rounded shadow">
           {results.map((place, index) => (
             <li
@@ -76,6 +80,3 @@ function Places({ onSelect }) {
 }
 
 export default Places;
-
-
-

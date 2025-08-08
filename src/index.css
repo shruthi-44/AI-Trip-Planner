@@ -117,5 +117,8 @@
   }
   body {
     @apply bg-background text-foreground;
+    
+    @apply min-h-screen overflow-y-auto;
+
   }
 }

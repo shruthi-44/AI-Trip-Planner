@@ -51,18 +51,26 @@ export const SelectTravelList=[
 ]
 
 
-export const AI_PROMPT = `Generate a travel plan in strict JSON format. 
+export const AI_PROMPT = `
+Generate a travel plan **strictly in valid JSON**. 
+Rules:
+- Return only JSON, no text before or after, no markdown, no code fences.
+- All keys must match exactly as provided.
+- All numbers must be valid JSON numbers (no strings for coordinates or ratings).
+- No trailing commas.
+- Ensure JSON is well-formed and parsable.
+
 Requirements:
-- Provide at least 4 high-quality hotel recommendations that are **local to the destination** ({location}).
--recommend for hotels that are **budget-friendly** to **moderate** based on the provided budget ({budget}).
-- Hotels must be real or realistic, include addresses specific to {location}, and match the group size and {budget}.
-- Prioritize hotels with high ratings and diverse pricing (budget-friendly to moderate).
-- Only include hotels around {location}, not generic or international chains unless available locally.
-- Include a detailed itinerary for each day, with at least 3 places to visit per day.
-- Include a variety of places such as historical sites, parks, and local attractions.
+- Location: {location}
+- Duration: {totalDays} Days
+- Group Size: {traveler}
+- Budget: {budget}
+- At least 4 real or realistic hotel recommendations matching budget & group size.
+- Hotels must have real or realistic addresses in {location}.
+- Include coordinates for each hotel and attraction.
+- For each day: at least 3 varied attractions (historical sites, parks, local attractions).
 
-The JSON must have this exact structure:
-
+Output JSON in this exact structure:
 {
   "tripData": {
     "travelPlan": {
@@ -74,7 +82,7 @@ The JSON must have this exact structure:
         {
           "hotelName": "string",
           "address": "string",
-          "price": "string",
+          "price": number,
           "image": "string",
           "geoCoordinates": { "lat": number, "lng": number },
           "rating": number,
@@ -100,5 +108,4 @@ The JSON must have this exact structure:
     }
   }
 }
-
-Ensure that all keys are exactly as shown above. Do not include explanations or markdown. Only output pure JSON.`;
+`;
